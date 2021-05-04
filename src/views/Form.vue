@@ -5,7 +5,7 @@
       <div class="nes-container is-dark with-title">
         <p class="title">Special tips</p>
         <p>You can use Object.fromEntries(new FormData(event.target)) instead of v-model</p>
-        <p>This form use NES stye</p>
+        <p>This form use NES style</p>
       </div>
 
       <div class="nes-container with-title">
@@ -18,10 +18,12 @@
           <i class="nes-pokeball"></i>
         </section>
         
-        <form @submit.prevent="" autocomplete="off">
+        <form @submit.prevent="submitForm" autocomplete="off">
           <fieldset>
           <legend></legend>
             <div class="form-wrap flex flex-col">
+
+              <TextButton :title="'PressMe'" />
 
               NOW: {{ form.picker }}
               <DatepickerPikaday 
@@ -60,7 +62,7 @@
               <DatalistBox v-model:browser="form.browser" :idList="'browsers'" />
               <br/>
 
-              <TextButton :title="'PressMe'" />
+              
               
             </div>
           </fieldset>
@@ -86,7 +88,7 @@
       </pre>
     </section>
 
-    
+    <BadgeDialog :dataDialog="form" v-model:active="activeDialog" v-show="activeDialog" />
   </div>
 </template>
 
@@ -116,10 +118,17 @@ export default {
       browser: '',
     });
 
-    // console.log(form.value);
+    const activeDialog = ref(false);
+
+    const submitForm = () => {
+      activeDialog.value = true;
+      // console.log('data: ', form)
+    }
 
     return {
       form,
+      submitForm,
+      activeDialog,
     }
   }
 }
