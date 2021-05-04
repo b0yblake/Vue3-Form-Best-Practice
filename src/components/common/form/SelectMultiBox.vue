@@ -43,7 +43,7 @@ export default {
     const listSelected = ref([]);
 
     watchEffect(() => {
-      console.log(listSelected.value)
+      // console.log(listSelected.value)
       emit("update:gender", listSelected.value)
     })
 

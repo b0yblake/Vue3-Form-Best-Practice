@@ -1,7 +1,7 @@
 <template>
 
-  <div class="nes-dialog" id="badge-dialog" >
-    <form method="dialog" class="dialog" @keydown.esc="handleEsc" tabindex="0" ref="dialog"> 
+  <div class="nes-dialog" id="badge-dialog">
+    <form method="dialog" class="dialog" @keydown.esc="handleEsc" tabindex="0" ref="dialog">
       <p class="title"></p>
       <dl>
         <dt>Data</dt>
@@ -16,6 +16,7 @@
       </menu>
     </form>
   </div>
+
 </template>
 
 <script>
@@ -33,34 +34,34 @@ export default {
     },
     active: {
       type: Boolean,
-    }
+    },
+    preventBackgroundScrolling: { default: true }
   },
   setup(props, { emit }) {
     
     const handleDialog = () => {
-      // console.log('OK')
       emit("update:active", false)
     }
 
     const handleEsc = () => {
-      // console.log('press esc button');
       handleDialog()
     }
 
     const dialog = ref(null);
 
     watchEffect(() => {
-      // console.log('active: ', props.active)
       if(props.active) {
-        // console.log('active1: ', props.active)
-        // console.log('dialog.value: ', dialog.value)
-        //dialog.value.focus(); // Không focus được vì nó chưa xuất hiện, phải dùng nextTick
 
+        // Chúng ta cần cover thêm 1 bước nữa khi muốn scale app (preventBackgroundScrolling)
+        props.preventBackgroundScrolling && document.body.style.setProperty('overflow', 'hidden') 
+
+        //dialog.value.focus(); // Không focus được vì nó chưa xuất hiện, phải dùng nextTick
         // nextTick có thể dùng với asyn/await
         nextTick(() => {
-          // DOM is now updated
-          dialog.value.focus();
+          dialog.value.focus(); // DOM is now updated
         })
+      }else {
+        props.preventBackgroundScrolling && document.body.style.removeProperty('overflow')
       }
     })
 
@@ -75,13 +76,14 @@ export default {
 
 <style scoped>
 .nes-dialog {
-  background-color: rgba(0,0,0,.3);
-  position: absolute;
+  background-color: rgba(0,0,0,.5);
+  position: fixed;
   right: 0;
   left: 0;
   top: 0;
   bottom: 0;
-  
+  border: none;
+  padding: 0;
 }
 .dialog {
   position: absolute;

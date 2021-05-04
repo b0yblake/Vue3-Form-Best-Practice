@@ -15,7 +15,6 @@
           <i class="nes-pokeball"></i>
           <i class="nes-pokeball"></i>
           <i class="nes-pokeball"></i>
-          <i class="nes-pokeball"></i>
         </section>
         
         <form @submit.prevent="submitForm" autocomplete="off">
@@ -62,8 +61,6 @@
               <DatalistBox v-model:browser="form.browser" :idList="'browsers'" />
               <br/>
 
-              
-              
             </div>
           </fieldset>
         </form>
@@ -95,7 +92,8 @@
 <script>
 import {
   ref,
-  reactive
+  reactive,
+  watchEffect,
 } from 'vue';
 
 export default {
@@ -122,7 +120,6 @@ export default {
 
     const submitForm = () => {
       activeDialog.value = true;
-      // console.log('data: ', form)
     }
 
     return {
