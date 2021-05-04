@@ -1,5 +1,4 @@
 <template>
-
   <div class="nes-dialog" id="badge-dialog">
     <form method="dialog" class="dialog" @keydown.esc="handleEsc" tabindex="0" ref="dialog">
       <p class="title"></p>
@@ -11,9 +10,10 @@
           </pre>
         </dd>
       </dl>
-      <menu class="dialog-menu is-centered">
-        <button class="nes-btn is-primary" @click="handleDialog">OK</button>
-      </menu>
+      <button class="nes-btn is-primary" @click="handleDialog">OK</button>
+
+      <!-- Delete all data dialog -->
+      <slot name="del-dialog"></slot>
     </form>
   </div>
 
@@ -75,34 +75,4 @@ export default {
 </script>
 
 <style scoped>
-.nes-dialog {
-  background-color: rgba(0,0,0,.5);
-  position: fixed;
-  right: 0;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  border: none;
-  padding: 0;
-}
-.dialog {
-  position: absolute;
-  right: 0;
-  left: 0;
-  display: block;
-  width: -moz-fit-content;
-  width: -webkit-fit-content;
-  width: fit-content;
-  height: -moz-fit-content;
-  height: -webkit-fit-content;
-  height: fit-content;
-  padding: 2em;
-  margin: auto !important;
-  color: #000;
-  background: #fff;
-  border: solid;
-  top: 0;
-  bottom: 0;
-  max-width: 500px;
-}
 </style>

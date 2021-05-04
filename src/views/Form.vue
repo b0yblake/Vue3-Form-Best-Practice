@@ -85,7 +85,22 @@
       </pre>
     </section>
 
-    <BadgeDialog :dataDialog="form" v-model:active="activeDialog" v-show="activeDialog" />
+    <teleport to="#layer">
+
+      <!-- Common dialog -->
+      <BadgeDialog :dataDialog="form" v-model:active="activeDialog" v-show="activeDialog">
+        
+        <!-- Delete all data dialog -->
+        <template #del-dialog>
+          <button class="nes-btn is-error" @click="onShowDelDialog">REMOVE ALL</button>
+        </template>
+      </BadgeDialog>
+
+      <!-- Delelte dialog confirm -->
+      <DelAllDialog v-show="activeDelDialog" v-model:active2="activeDelDialog" />
+
+    </teleport>
+    
   </div>
 </template>
 
@@ -93,7 +108,6 @@
 import {
   ref,
   reactive,
-  watchEffect,
 } from 'vue';
 
 export default {
@@ -118,14 +132,23 @@ export default {
 
     const activeDialog = ref(false);
 
+    const activeDelDialog = ref(false);
+
     const submitForm = () => {
       activeDialog.value = true;
     }
 
+    const onShowDelDialog = () => {
+      console.log('activeDelDialog.value: ', activeDelDialog.value);
+      activeDelDialog.value = true;
+    }
+    
     return {
       form,
       submitForm,
       activeDialog,
+      activeDelDialog,
+      onShowDelDialog,
     }
   }
 }
