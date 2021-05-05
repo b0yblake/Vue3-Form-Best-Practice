@@ -17,7 +17,7 @@
           <i class="nes-pokeball"></i>
         </section>
         
-        <form @submit.prevent="submitForm" autocomplete="off">
+        <form @submit.prevent="submitForm" autocomplete="off" ref="full_form">
           <fieldset>
           <legend></legend>
             <div class="form-wrap flex flex-col">
@@ -66,7 +66,7 @@
         </form>
       </div>
     </section>
-    <section class="log_board debug flex w-2/4 mt-10 p-5 rounded ">
+    <section class="log_board debug flex w-2/4 mt-10 p-5 rounded">
       <pre>
         <code>
           Data on parent
@@ -91,14 +91,13 @@
       <BadgeDialog :dataDialog="form" v-model:active="activeDialog" v-show="activeDialog">
         
         <!-- Delete all data dialog -->
-        <template #del-dialog>
+        <template #delDialog>
           <button class="nes-btn is-error" @click="onShowDelDialog">REMOVE ALL</button>
         </template>
       </BadgeDialog>
 
       <!-- Delelte dialog confirm -->
-      <DelAllDialog v-show="activeDelDialog" v-model:active2="activeDelDialog" />
-
+      <DelAllDialog v-show="activeDelDialog" @handle-confirm-del-data="onConfirm" @handle-badga-dialog="onConfirm2" />
     </teleport>
     
   </div>
@@ -108,6 +107,7 @@
 import {
   ref,
   reactive,
+  watchEffect,
 } from 'vue';
 
 export default {
@@ -116,32 +116,63 @@ export default {
     return {
       mocData: ['games', 'foods', 'code'],
       loves: ['Yes', 'No'],
+
     }
   },
   setup() {
-    const form = reactive({
-      picker: '',
-      address: '',
-      desc: 'Textarea ...',
-      location: '',
-      gender: '',
-      favorite: '',
-      love: '',
-      browser: '',
-    });
+
+    const initialStateForm = {
+      picker: null,
+      address: null,
+      desc: null,
+      location: null,
+      gender: null,
+      favorite: null,
+      love: null,
+      browser: null,
+    }
+    
+    const form = reactive({...initialStateForm});
 
     const activeDialog = ref(false);
-
     const activeDelDialog = ref(false);
+    const full_form = ref(null);
+
+    const onConfirm = (e) => {
+      console.log('value del dialog: ', e);
+      activeDelDialog.value = e;
+      
+
+    }
+
+    const onConfirm2 = (e) => {
+      console.log('value badge dialog: ', e);
+      activeDialog.value = e;
+
+      full_form.value.reset();
+
+      const resetForm = Object.assign(form, initialStateForm);
+
+      // form.picker = '';
+      // form.address = '';
+      // form.desc = 'Textarea ...';
+      // form.location = '';
+      // form.gender = '';
+      // form.favorite = '';
+      // form.love = '';
+      // form.browser = '';
+    }
 
     const submitForm = () => {
       activeDialog.value = true;
     }
 
     const onShowDelDialog = () => {
-      console.log('activeDelDialog.value: ', activeDelDialog.value);
       activeDelDialog.value = true;
     }
+
+    watchEffect(() => {
+    })
     
     return {
       form,
@@ -149,6 +180,9 @@ export default {
       activeDialog,
       activeDelDialog,
       onShowDelDialog,
+      full_form,
+      onConfirm,
+      onConfirm2,
     }
   }
 }
@@ -162,6 +196,7 @@ body {
 </style>
 
 <style scoped>
+
 .form-all v-deep .form-text {
   margin-bottom: 15px;
 }
@@ -170,6 +205,9 @@ body {
   padding: 50px 50px 50px 0;
   background: rgba(0, 0, 0, 0.8);
   box-shadow: 0 4px 6px 0 rgb(0 0 0 / 30%);
+}
+.debug code {
+  font-size: 14px;
 }
 .debug pre {
   color: #ffffff;

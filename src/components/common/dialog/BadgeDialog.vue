@@ -13,7 +13,7 @@
       <button class="nes-btn is-primary" @click="handleDialog">OK</button>
 
       <!-- Delete all data dialog -->
-      <slot name="del-dialog"></slot>
+      <div class="a" v-if="isDelDialogSlot"><slot name="delDialog"></slot></div>
     </form>
   </div>
 
@@ -24,6 +24,7 @@ import {
   ref,
   watchEffect,
   nextTick,
+  computed,
 } from 'vue';
 
 export default {
@@ -37,11 +38,16 @@ export default {
     },
     preventBackgroundScrolling: { default: true }
   },
-  setup(props, { emit }) {
+  setup(props, context) {
     
     const handleDialog = () => {
-      emit("update:active", false)
+      context.emit("update:active", false)
     }
+
+    const isDelDialogSlot = computed(() => {
+      return true;
+      return context.slots.delDialog || false
+    })
 
     const handleEsc = () => {
       handleDialog()
@@ -69,6 +75,7 @@ export default {
       dialog,
       handleDialog,
       handleEsc,
+      isDelDialogSlot,
     }
   }
 }
