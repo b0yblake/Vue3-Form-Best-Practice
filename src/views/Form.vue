@@ -2,10 +2,19 @@
   <div class="flex flex-row ">
     <section class="form-all border border-gray-400 rounded p-5 m-10 bg-white w-2/4">
 
+      <!-- i18n -->
+      <select v-model="locale">
+        <option value="vi" selected>VI</option>
+        <option value="en">ENG</option>
+      </select>
+
+      <RenderFuncEx :heading="'1'" />
+
       <div class="nes-container is-dark with-title">
-        <p class="title">Special tips</p>
-        <p>You can use Object.fromEntries(new FormData(event.target)) instead of v-model</p>
-        <p>This form use NES style</p>
+        <p class="title">{{ $t('main_title') }}</p>
+        <p>{{ $t('desc.text') }}</p>
+        <p>{{ $t('desc.sub_text') }}</p>
+        <p>{{ $t('desc.dynamic_variable', 2) }}</p>
       </div>
 
       <div class="nes-container with-title">
@@ -108,7 +117,8 @@ import {
   ref,
   reactive,
   watchEffect,
-} from 'vue';
+} from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: "Form",
@@ -120,6 +130,11 @@ export default {
     }
   },
   setup() {
+    //i18n
+    const { locale } = useI18n({
+      inheritLocale: true,
+      useScope: 'global'
+    })
 
     const initialStateForm = {
       picker: null,
@@ -175,6 +190,7 @@ export default {
     })
     
     return {
+      locale,
       form,
       submitForm,
       activeDialog,

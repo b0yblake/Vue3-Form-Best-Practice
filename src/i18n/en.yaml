@@ -1,0 +1,5 @@
+main_title: "Special tips"
+desc:
+  text: "You can use Object.fromEntries(new FormData(event.target)) instead of v-model"
+  sub_text: "This form use NES style"
+  dynamic_variable: "You have { n } languages to display"
